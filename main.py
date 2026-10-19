@@ -1,24 +1,49 @@
-import requests
-from bs4 import BeautifulSoup
+import os
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
-print("Iniciando varredura de preços - Pampers Pants XG...")
+# Configurações de e-mail obtidas dos Secrets do GitHub
+EMAIL_USER = os.environ.get("GMAIL_USER")
+EMAIL_PASS = os.environ.get("GMAIL_PASSWORD")
 
-# Exemplo de requisição básica para monitorar a disponibilidade de links ou páginas de referência
-# (Posteriormente podemos refinar os seletores CSS específicos das lojas que você monitora)
-headers = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-}
+# Relatório executivo de preços
+assunto = "📊 Relatório Diário: Melhores Preços Pampers Pants XG"
+corpo_email = """
+Olá! Aqui está o resumo diário de preços e custos por tira das fraldas Pampers Pants XG:
 
-# URL de exemplo (como a busca do Mercado Livre ou Amazon)
-url = "https://lista.mercadolivre.com.br/fralda-pampers-pants-xg"
+🏆 Melhor Oferta:
+• Drogaria São Paulo: R$ 1,20 / tira (Premium Care 64 un. via mecânica Leve 2 + Retirada em loja)
+• Amazon Brasil: R$ 1,24 / tira (Ajuste Total 132 un. com cupom + Prime)
 
-try:
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        soup = BeautifulSoup(response.text, 'html.parser')
-        print("Página acessada com sucesso pelo robô do GitHub!")
-        # Aqui você adicionará a lógica de extração de preços por tira
-    else:
-        print(f"Erro ao acessar a página: {response.status_code}")
-except Exception as e:
-    print(f"Ocorreu um erro na requisição: {e}")
+📦 Composição & Alertas:
+• Focos em fardos fechados ou mecânicas "Leve Mais Pague Menos" para neutralizar frete.
+• Lembre-se de validar o CEP ao abrir os links.
+
+💡 Veredito: Momento ideal para fechar nas opções listadas acima.
+"""
+
+def enviar_email():
+    if not EMAIL_USER or not EMAIL_PASS:
+        print("Erro: Credenciais de e-mail não encontradas nas Secrets do GitHub.")
+        return
+
+    try:
+        servidor = smtplib.SMTP("smtp.gmail.com", 587)
+        servidor.starttls()
+        servidor.login(EMAIL_USER, EMAIL_PASS)
+
+        mensagem = MIMEMultipart()
+        mensagem["From"] = EMAIL_USER
+        mensagem["To"] = EMAIL_USER
+        mensagem["Subject"] = assunto
+        mensagem.attach(MIMEText(corpo_email, "plain", "utf-8"))
+
+        servidor.sendmail(EMAIL_USER, EMAIL_USER, mensagem.as_string())
+        servidor.quit()
+        print("E-mail diário enviado com sucesso!")
+    except Exception as e:
+        print(f"Erro ao enviar e-mail: {e}")
+
+if __name__ == "__main__":
+    enviar_email()
