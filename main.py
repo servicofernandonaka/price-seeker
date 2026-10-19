@@ -7,18 +7,28 @@ from email.mime.text import MIMEText
 EMAIL_USER = os.environ.get("GMAIL_USER")
 EMAIL_PASS = os.environ.get("GMAIL_PASSWORD")
 
-# Relatório executivo de preços
-assunto = "📊 Relatório Diário: Melhores Preços Pampers Pants XG"
+# Relatório executivo de preços atualizado com links diretos
+assunto = "📊 Relatório Diário: Melhores Preços Pampers Pants XG com Links"
 corpo_email = """
-Olá! Aqui está o resumo diário de preços e custos por tira das fraldas Pampers Pants XG:
+Olá! Aqui está o resumo diário de preços, custos por tira e links diretos das fraldas Pampers Pants XG:
 
-🏆 Melhor Oferta:
-• Drogaria São Paulo: R$ 1,20 / tira (Premium Care 64 un. via mecânica Leve 2 + Retirada em loja)
-• Amazon Brasil: R$ 1,24 / tira (Ajuste Total 132 un. com cupom + Prime)
+🏆 MELHORES OFERTAS E LINKS:
 
-📦 Composição & Alertas:
-• Focos em fardos fechados ou mecânicas "Leve Mais Pague Menos" para neutralizar frete.
-• Lembre-se de validar o CEP ao abrir os links.
+1. 🟢 Pampers Pants Premium Care XG (64 un. - Drogaria São Paulo)
+   • Preço Efetivo: R$ 1,20 / tira (via mecânica Leve 2 + Retirada em loja)
+   • Link: https://www.drogariasaopaulo.com.br/fraldas-pampers-pants-premium-care-top-xg-64-unidades/p
+
+2. 🔵 Pampers Pants Ajuste Total XG (132 un. - Amazon Brasil)
+   • Preço Efetivo: R$ 1,24 / tira (com cupom + frete Prime)
+   • Link: https://amzn.achados.me/nDZLhb7
+
+3. 🔵 Pampers Pants Ajuste Total XG (82 un. - Drogasil)
+   • Preço Efetivo: R$ 1,34 / tira (via mecânica Leve Mais Pague Menos + Retirada)
+   • Link: https://www.drogasil.com.br/campanha-trd-pampers-51946.html
+
+📦 PONTOS DE ATENÇÃO:
+• Lembre-se de informar o seu CEP e selecionar a retirada em loja nas farmácias para zerar o frete.
+• Verifique se os cupons de desconto continuam ativos na página de checkout.
 
 💡 Veredito: Momento ideal para fechar nas opções listadas acima.
 """
@@ -41,7 +51,7 @@ def enviar_email():
 
         servidor.sendmail(EMAIL_USER, EMAIL_USER, mensagem.as_string())
         servidor.quit()
-        print("E-mail diário enviado com sucesso!")
+        print("E-mail diário com links enviado com sucesso!")
     except Exception as e:
         print(f"Erro ao enviar e-mail: {e}")
 
