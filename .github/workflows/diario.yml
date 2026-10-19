@@ -1,0 +1,26 @@
+name: Monitor de Preços Diário
+
+on:
+  schedule:
+    # Roda todo dia às 09:00 UTC (que equivale exatamente às 06:00 da manhã no horário de Brasília)
+    - cron: '0 9 * * *'
+  workflow_dispatch: # Permite testar clicando em um botão a qualquer momento
+
+jobs:
+  executar-script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Copiar código do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar ambiente Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Instalar dependências (bibliotecas)
+        run: |
+          pip install requests beautifulsoup4
+
+      - name: Executar o script de preços
+        run: python main.py
